@@ -2,4 +2,4 @@
 
 use App::BashComplete;
 
-App::BashComplete->new->run;
+exit(App::BashComplete->new->run);
