@@ -12,8 +12,9 @@ $ENV{COMP_POINT} = 12;
 my $r = Bash::Completion::Request->new;
 
 ok($r, 'Created Request instance ok');
-is($r->line, 'abcd efgh word', '... expected command line');
-is($r->word, 'wo',             '... expected parsed word');
+is($r->line,  'abcd efgh word', '... expected command line');
+is($r->word,  'wo',             '... expected parsed word');
+is($r->point, 12,               '... expected point value');
 
 ok($r->can('candidates'), 'Request accepts method candidates()');
 

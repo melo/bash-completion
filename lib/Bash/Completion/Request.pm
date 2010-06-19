@@ -20,8 +20,11 @@ sub _get_completion_word {
   return $comp;
 }
 
-sub line { return $_[0]{line} }
-sub word { return $_[0]{word} }
+
+## Accessors
+sub line  { return $_[0]{line} }
+sub word  { return $_[0]{word} }
+sub point { return $_[0]{point} }
 
 sub candidates {
   my $self = shift;
