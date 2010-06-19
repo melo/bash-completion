@@ -14,14 +14,15 @@ use File::Spec::Functions;
 Given a command name, returns the full path if we find it in the PATH.
 
 =cut
+
 sub command_in_path {
   my ($cmd) = @_;
-  
-  for my $path (grep { $_ } split(/:/, $ENV{PATH})) {
+
+  for my $path (grep {$_} split(/:/, $ENV{PATH})) {
     my $file = catfile($path, $cmd);
     return $file if -x $file;
   }
-  
+
   return;
 }
 
