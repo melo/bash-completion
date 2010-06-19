@@ -15,4 +15,6 @@ ok($r, 'Created Request instance ok');
 is($r->line, 'abcd efgh word', '... expected command line');
 is($r->word, 'wo',             '... expected parsed word');
 
+ok($r->can('candidates'), 'Request accepts method candidates()');
+
 done_testing();

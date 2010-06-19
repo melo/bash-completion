@@ -23,7 +23,7 @@ sub _get_completion_word {
 sub line { return $_[0]{line} }
 sub word { return $_[0]{word} }
 
-sub candidate {
+sub candidates {
   my $self = shift;
 
   print "$_\n" for @_;
