@@ -51,7 +51,7 @@ my @mtchs =
 cmp_bag(\@mtchs, ['--help', '--helicopter'],
   'Matched correct set of options');
 
-my @mtchs = prefix_match('a', 'never', 'always', 'perl', 'python', 'antique');
+@mtchs = prefix_match('a', 'never', 'always', 'perl', 'python', 'antique');
 cmp_bag(\@mtchs, ['always', 'antique'], 'Matched correct set of words');
 
 
