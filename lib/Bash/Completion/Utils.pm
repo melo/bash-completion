@@ -7,6 +7,7 @@ use File::Spec::Functions;
 
 @Bash::Completion::Utils::EXPORT_OK = qw(
   command_in_path
+  match_perl_modules
 );
 
 =function command_in_path
@@ -24,6 +25,47 @@ sub command_in_path {
   }
 
   return;
+}
+
+
+=function match_perl_modules
+
+=cut
+
+sub match_perl_modules {
+  my ($pm) = @_;
+  my @found;
+
+  my ($ns, $name) = $pm =~ m{^(.+::)?(.*)};
+  $ns = '' unless $ns;
+
+  my $base = $ns;
+  $base =~ s{::}{/}g;
+
+  for my $lib (@INC) {
+    _scan_dir_for_perl_modules(catdir($lib, $base), $ns, $name, \@found);
+  }
+
+  return @found;
+}
+
+sub _scan_dir_for_perl_modules {
+  my ($dir, $ns, $name, $found) = @_;
+
+  return unless opendir(my $dh, $dir);
+
+  while (my $entry = readdir($dh)) {
+    next if $entry =~ /^[.]/;
+
+    my $path = catfile($dir, $entry);
+
+    if (-d $path && $entry =~ m/^$name/) {
+      push @$found, "$ns${entry}::";
+    }
+    elsif (-f _ && $entry =~ m/^($name.*)[.]pm$/) {
+      push @$found, "$ns$1";
+    }
+  }
 }
 
 1;

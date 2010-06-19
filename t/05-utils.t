@@ -3,8 +3,9 @@
 use strict;
 use warnings;
 use Test::More;
+use Test::Deep;
 
-use_ok('Bash::Completion::Utils', qw(command_in_path))
+use_ok('Bash::Completion::Utils', qw(command_in_path match_perl_modules))
   || die "Could not load Bash::Completion::Utils, ";
 
 ## command_in_path
@@ -13,6 +14,29 @@ ok(
   !command_in_path('non_existing_command'),
   'command_in_path(non_existing_command) also works'
 );
+
+
+## match_perl_modules
+my @pm = match_perl_modules('Bash::Comple');
+cmp_bag(\@pm, ['Bash::Completion', 'Bash::Completion::']);
+
+@pm = match_perl_modules('Bash::Completion');
+cmp_bag(\@pm, ['Bash::Completion', 'Bash::Completion::']);
+
+@pm = match_perl_modules('Bash::Completion::');
+cmp_bag(
+  \@pm,
+  [ 'Bash::Completion::Utils',  'Bash::Completion::Plugins::',
+    'Bash::Completion::Plugin', 'Bash::Completion::Request'
+  ]
+);
+
+@pm = match_perl_modules('Bash::Completion::U');
+cmp_bag(\@pm, ['Bash::Completion::Utils']);
+
+@pm = match_perl_modules('Bash::Completion::Uz');
+cmp_bag(\@pm, []);
+
 
 ## and we are done for today
 done_testing();
