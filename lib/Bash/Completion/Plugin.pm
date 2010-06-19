@@ -7,8 +7,15 @@ use warnings;
 
 sub new {
   my $class = shift;
+  my %args = (args => [], @_);
 
-  return bless {@_}, $class;
+  return bless \%args, $class;
+}
+
+sub args {
+  my ($self) = @_;
+
+  return @{$self->{args}};
 }
 
 
