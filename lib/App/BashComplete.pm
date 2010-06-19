@@ -15,6 +15,7 @@ use Getopt::Long qw(GetOptionsFromArray);
 Returns an HashRef with all the command line options used.
 
 =cut
+
 sub opts { return $_[0]->{opts} }
 
 =attr cmd_line
@@ -22,6 +23,7 @@ sub opts { return $_[0]->{opts} }
 Returns a ArrayRef with the parts of the command line that could not be parsed as options.
 
 =cut
+
 sub cmd_line { return $_[0]->{cmd_line} }
 
 
@@ -33,6 +35,7 @@ sub cmd_line { return $_[0]->{cmd_line} }
 Creates a new empty instance.
 
 =cut
+
 sub new { return bless {opts => {}, cmd_line => []}, shift }
 
 
@@ -42,8 +45,10 @@ Processes options, using both command line and arguments to run(), and
 executes the proper action.
 
 =cut
+
 sub run {
   my $self = shift;
+
   # TODO: move commands to a plugin system
 
   # TODO: proper usage message
@@ -71,12 +76,13 @@ This allows you to setup your bash completion with only this:
 The system will adjust to new plugins that you install via CPAN.
 
 =cut
+
 sub setup {
   my ($self) = @_;
   my $bc_src = '';
-  
+
   my $bc = Bash::Completion->new;
-  
+
   for my $plugin ($bc->plugins) {
     next unless $plugin->should_activate;
 
@@ -84,7 +90,7 @@ sub setup {
       $bc_src .= "\n$setup\n";
     }
   }
-  
+
   print "\n$bc_src\n";
   return 0;
 }
@@ -97,9 +103,10 @@ sub _parse_options {
   my $self = shift;
 
   my $cmd_line = $self->{cmd_line} = [@_];
-  my $opts = $self->{opts} = {};
+  my $opts     = $self->{opts}     = {};
 
   my $ok = GetOptionsFromArray($cmd_line, $opts, 'help');
+
   # TODO: deal with !$ok
   return unless $ok;
 
