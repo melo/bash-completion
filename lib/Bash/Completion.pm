@@ -4,6 +4,7 @@ package Bash::Completion;
 
 use strict;
 use warnings;
+use Bash::Completion::Request;
 use Module::Pluggable
   search_path => ['Bash::Completion::Plugins'],
   sub_name    => 'plugin_names';
@@ -15,6 +16,23 @@ Create a L<Bash::Completion> instance.
 =cut
 
 sub new { return bless {}, $_[0] }
+
+
+=method complete
+
+=cut
+
+sub complete {
+  my ($self, $plugin, $cmd_line) = @_;
+
+  my $class = "Bash::Completion::Plugins::$plugin";
+  return unless $self->_load_class($class);
+
+  my $req = Bash::Completion::Request->new;
+  $class->new(args => $cmd_line)->complete($req);
+
+  return 0;
+}
 
 
 =method load_plugins
@@ -30,8 +48,7 @@ sub plugins {
     my @plugins;
 
     for my $plugin_name ($self->plugin_names) {
-      eval "require $plugin_name";
-      next if $@;
+      next unless $self->_load_class($plugin_name);
 
       push @plugins, $plugin_name->new;
     }
@@ -42,5 +59,10 @@ sub plugins {
   return @{$self->{plugins}};
 }
 
+
+#######
+# Utils
+
+sub _load_class { return eval "require $_[1]" }
 
 1;
