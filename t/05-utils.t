@@ -38,6 +38,12 @@ cmp_bag(\@pm, ['Bash::Completion::Utils']);
 @pm = match_perl_modules('Bash::Completion::Uz');
 cmp_bag(\@pm, []);
 
+@pm = match_perl_modules('Ba', 'Bash::Completion::Plugins');
+cmp_bag(\@pm, ['BashComplete']);
+
+@pm = match_perl_modules('Plugins::Ba', 'Bash::Completion');
+cmp_bag(\@pm, ['Plugins::BashComplete']);
+
 
 ## prefix_match
 my @mtchs =

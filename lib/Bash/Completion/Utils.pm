@@ -34,13 +34,13 @@ sub command_in_path {
 =cut
 
 sub match_perl_modules {
-  my ($pm) = @_;
+  my ($pm, $bns) = @_;
   my @found;
 
   my ($ns, $name) = $pm =~ m{^(.+::)?(.*)};
   $ns = '' unless $ns;
 
-  my $base = $ns;
+  my $base = join('::', grep { $_ } ($bns, $ns));
   $base =~ s{::}{/}g;
 
   for my $lib (@INC) {
