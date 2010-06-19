@@ -4,7 +4,9 @@ package Bash::Completion;
 
 use strict;
 use warnings;
-use Module::Pluggable sub_name => 'list_plugins';
+use Module::Pluggable
+  search_path => ['Bash::Completion::Plugins'],
+  sub_name    => 'plugin_names';
 
 =method new
 
@@ -21,11 +23,20 @@ Search C<@INC> for all classes in the L<Bash::Completion::Plugin> namespace.
 
 =cut
 
-sub load_plugins {
+sub plugins {
   my ($self) = @_;
 
   unless ($self->{plugins}) {
-    $self->{plugins} = [map { $_->new } $self->list_plugins];
+    my @plugins;
+
+    for my $plugin_name ($self->plugin_names) {
+      eval "require $plugin_name";
+      next if $@;
+
+      push @plugins, $plugin_name->new;
+    }
+
+    $self->{plugins} = \@plugins;
   }
 
   return @{$self->{plugins}};
