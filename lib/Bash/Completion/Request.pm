@@ -1,5 +1,7 @@
 package Bash::Completion::Request;
 
+# ABSTRACT: Abstract a completion request
+
 use strict;
 use warnings;
 

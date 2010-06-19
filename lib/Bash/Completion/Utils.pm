@@ -1,5 +1,7 @@
 package Bash::Completion::Utils;
 
+# ABSTRACT: Set of utility functions that help writting plugins
+
 use strict;
 use warnings;
 use parent 'Exporter';

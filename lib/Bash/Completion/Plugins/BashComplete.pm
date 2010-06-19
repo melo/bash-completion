@@ -1,5 +1,7 @@
 package Bash::Completion::Plugins::BashComplete;
 
+# ABSTRACT: Plugin for bash-complete
+
 use strict;
 use warnings;
 use parent 'Bash::Completion::Plugin';
