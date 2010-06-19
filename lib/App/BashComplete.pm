@@ -44,10 +44,49 @@ executes the proper action.
 =cut
 sub run {
   my $self = shift;
+  # TODO: move commands to a plugin system
 
-  return unless $self->_parse_options(@_);
+  # TODO: proper usage message
+  return 1 unless my $cmd = $self->_parse_options(@_);
 
-  # TODO: deal with opts
+  return $self->setup if $cmd eq 'setup';
+
+  # TODO: proper unknown command message
+  return 1;
+}
+
+
+#########
+# Actions
+
+=method setup
+
+Collects all plugins, decides which ones should be activated, and generates the bash complete command lines for each one.
+
+This allows you to setup your bash completion with only this:
+
+    # Stick this into your .bashrc
+    eval $( bash-complete setup )
+
+The system will adjust to new plugins that you install via CPAN.
+
+=cut
+sub setup {
+  my ($self) = @_;
+  my $bc_src = '';
+  
+  my $bc = Bash::Completion->new;
+  
+  for my $plugin ($bc->plugins) {
+    next unless $plugin->should_activate;
+
+    if (my $setup = $plugin->generate_bash_setup()) {
+      $bc_src .= "\n$setup\n";
+    }
+  }
+  
+  print "\n$bc_src\n";
+  return 0;
 }
 
 
@@ -57,14 +96,14 @@ sub run {
 sub _parse_options {
   my $self = shift;
 
-  my $cmd_line = $self->{cmd_line} = [@_, @ARGV];
+  my $cmd_line = $self->{cmd_line} = [@_];
   my $opts = $self->{opts} = {};
 
-  my $ok = GetOptionsFromArray($cmd_line, $opts, 'setup');
-
+  my $ok = GetOptionsFromArray($cmd_line, $opts, 'help');
   # TODO: deal with !$ok
+  return unless $ok;
 
-  return $ok;
+  return shift(@$cmd_line);
 }
 
 1;
