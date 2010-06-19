@@ -9,7 +9,8 @@ sub new {
   return bless {
     line  => $ENV{COMP_LINE},
     point => $ENV{COMP_POINT},
-    word  => _get_completion_word(),
+    _get_completion_word(),
+    _get_arguments(),
   }, $class;
 }
 
@@ -17,13 +18,22 @@ sub new {
 sub _get_completion_word {
   my $comp = substr $ENV{'COMP_LINE'}, 0, $ENV{'COMP_POINT'};
   $comp =~ s/.*\h//;
-  return $comp;
+  return word => $comp;
+}
+
+sub _get_arguments {
+  my $comp = substr $ENV{'COMP_LINE'}, 0, $ENV{'COMP_POINT'};
+  my @args = split(/\h+/, $comp);
+
+  return args => \@args, count => scalar(@args);
 }
 
 
 ## Accessors
 sub line  { return $_[0]{line} }
 sub word  { return $_[0]{word} }
+sub args  { return @{$_[0]{args}} }
+sub count { return $_[0]{count} }
 sub point { return $_[0]{point} }
 
 sub candidates {
