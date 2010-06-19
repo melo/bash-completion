@@ -7,12 +7,15 @@ use Test::More;
 use_ok('Bash::Completion::Plugin')
   || die "Could not load Bash::Completion::Plugin, ";
 
+my $plugin = Bash::Completion::Plugin->new;
+ok($plugin, 'Got a plugin instance');
+
 ok(
-  !Bash::Completion::Plugin->should_activate,
+  !$plugin->should_activate,
   'Default should_activate() returns false'
 );
 ok(
-  !Bash::Completion::Plugin->generate_bash_setup,
+  !$plugin->generate_bash_setup,
   'Default generate_bash_setup() returns false'
 );
 

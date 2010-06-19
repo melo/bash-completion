@@ -5,6 +5,13 @@ package Bash::Completion::Plugin;
 use strict;
 use warnings;
 
+sub new {
+  my $class = shift;
+
+  return bless {@_}, $class;
+}
+
+
 =method should_activate
 
 The method C<should_activate()> is used by the automatic setup of
@@ -18,7 +25,9 @@ command we want to provide completion, and return true only if that
 command is found.
 
 =cut
+
 sub should_activate {return}
+
 
 =method generate_bash_setup
 
@@ -33,6 +42,7 @@ This will execute C<bash-complete cmd Perldoc> to complete the
 C<perldoc> command. The C<Perldoc> string is the plugin name.
 
 =cut
+
 sub generate_bash_setup {return}
 
 1;
