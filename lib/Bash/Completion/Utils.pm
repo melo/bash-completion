@@ -42,7 +42,7 @@ sub match_perl_modules {
   my ($ns, $name) = $pm =~ m{^(.+::)?(.*)};
   $ns = '' unless $ns;
 
-  my $base = join('::', grep { $_ } ($bns, $ns));
+  my $base = join('::', grep {$_} ($bns, $ns));
   $base =~ s{::}{/}g;
 
   for my $lib (@INC) {
@@ -74,6 +74,10 @@ sub _scan_dir_for_perl_modules {
 
 =function prefix_match
 
+Accepts a single word and a list of options.
+
+Returns the options that match the word.
+
 =cut
 
 sub prefix_match {
@@ -89,7 +93,7 @@ __END__
 =head1 SYNOPSIS
 
     use Bash::Completion::Utils qw( command_in_path );
-    
+
     ...
 
 =head1 DESCRIPTION

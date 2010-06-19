@@ -35,7 +35,7 @@ sub complete {
 }
 
 
-=method load_plugins
+=method plugins
 
 Search C<@INC> for all classes in the L<Bash::Completion::Plugin> namespace.
 

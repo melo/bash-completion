@@ -5,12 +5,33 @@ package Bash::Completion::Plugin;
 use strict;
 use warnings;
 
+=method new
+
+A basic plugin constructor. Accepts a list of key/values. Accepted keys:
+
+=over 4
+
+=item args
+
+A list reference with parameters to this plugin.
+
+=back
+
+=cut
+
 sub new {
   my $class = shift;
   my %args = (args => [], @_);
 
   return bless \%args, $class;
 }
+
+
+=attr args
+
+An list reference with plugin arguments.
+
+=cut
 
 sub args {
   my ($self) = @_;
@@ -60,20 +81,20 @@ __END__
 
     ## Example plugin for xpto command
     package Bash::Completion::Plugin::XPTO;
-    
+
     use strict;
     use warnings;
     use parent 'Bash::Completion::Plugin';
     use Bash::Completion::Utils qw( command_in_path );
-    
+
     sub should_activate {
       return command_in_path('xpto');
     }
-    
+
     sub generate_bash_setup {
       return 'complete -C "bash-complete cmd XPTO" xpto';
     }
-    
+
     1;
 
 =head1 DESCRIPTION

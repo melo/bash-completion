@@ -5,6 +5,58 @@ package Bash::Completion::Request;
 use strict;
 use warnings;
 
+=attr line
+
+The full command line.
+
+=cut
+
+sub line { return $_[0]{line} }
+
+
+=attr word
+
+The word to be completed.
+
+=cut
+
+sub word { return $_[0]{word} }
+
+
+=attr args
+
+The command line as a list of words.
+
+=cut
+
+sub args { return @{$_[0]{args}} }
+
+
+=attr count
+
+Number of words in the command line before the completion point.
+
+=cut
+
+sub count { return $_[0]{count} }
+
+
+=attr point
+
+The index in the command line where the shell cursor is.
+
+=cut
+
+sub point { return $_[0]{point} }
+
+
+=method new
+
+Constructs a completion request object based on the bash environment
+variables: C<COMP_LINE> and C<COMP_POINT>.
+
+=cut
+
 sub new {
   my ($class) = @_;
 
@@ -15,6 +67,23 @@ sub new {
     _get_arguments(),
   }, $class;
 }
+
+
+=method candidates
+
+Accepts a list of completion candidates and passes them on to the shell.
+
+=cut
+
+sub candidates {
+  my $self = shift;
+
+  print "$_\n" for @_;
+}
+
+
+#######
+# Utils
 
 ## Stolen from http://github.com/yanick/dist-zilla/blob/master/contrib/dzil-complete
 sub _get_completion_word {
@@ -28,20 +97,6 @@ sub _get_arguments {
   my @args = split(/\h+/, $comp);
 
   return args => \@args, count => scalar(@args);
-}
-
-
-## Accessors
-sub line  { return $_[0]{line} }
-sub word  { return $_[0]{word} }
-sub args  { return @{$_[0]{args}} }
-sub count { return $_[0]{count} }
-sub point { return $_[0]{point} }
-
-sub candidates {
-  my $self = shift;
-
-  print "$_\n" for @_;
 }
 
 
