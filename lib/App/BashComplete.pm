@@ -54,7 +54,8 @@ sub run {
   # TODO: proper usage message
   return 1 unless my $cmd = $self->_parse_options(@_);
 
-  return $self->setup if $cmd eq 'setup';
+  return $self->setup    if $cmd eq 'setup';
+  return $self->complete if $cmd eq 'complete';
 
   # TODO: proper unknown command message
   return 1;
@@ -63,6 +64,24 @@ sub run {
 
 #########
 # Actions
+
+=method complete
+
+=cut
+
+sub complete {
+  my ($self)   = @_;
+  my $cmd_line = $self->cmd_line;
+  my $plugin   = shift @$cmd_line;
+
+  ## TODO: need a plugin
+  return 1 unless $plugin;
+
+  my $bc = Bash::Completion->new;
+  return 0 if $bc->complete($plugin, $cmd_line);
+  return 1;
+}
+
 
 =method setup
 
