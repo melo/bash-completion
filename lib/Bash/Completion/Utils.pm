@@ -8,6 +8,7 @@ use File::Spec::Functions;
 @Bash::Completion::Utils::EXPORT_OK = qw(
   command_in_path
   match_perl_modules
+  prefix_match
 );
 
 =function command_in_path
@@ -66,6 +67,17 @@ sub _scan_dir_for_perl_modules {
       push @$found, "$ns$1";
     }
   }
+}
+
+
+=function prefix_match
+
+=cut
+
+sub prefix_match {
+  my $prefix = shift;
+
+  return grep {/^$prefix/} @_;
 }
 
 1;

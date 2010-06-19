@@ -5,7 +5,8 @@ use warnings;
 use Test::More;
 use Test::Deep;
 
-use_ok('Bash::Completion::Utils', qw(command_in_path match_perl_modules))
+use_ok('Bash::Completion::Utils',
+  qw(command_in_path match_perl_modules prefix_match))
   || die "Could not load Bash::Completion::Utils, ";
 
 ## command_in_path
@@ -36,6 +37,16 @@ cmp_bag(\@pm, ['Bash::Completion::Utils']);
 
 @pm = match_perl_modules('Bash::Completion::Uz');
 cmp_bag(\@pm, []);
+
+
+## prefix_match
+my @mtchs =
+  prefix_match('--h', '--dry', '--help', '--helicopter', '--nothing', '-h');
+cmp_bag(\@mtchs, ['--help', '--helicopter'],
+  'Matched correct set of options');
+
+my @mtchs = prefix_match('a', 'never', 'always', 'perl', 'python', 'antique');
+cmp_bag(\@mtchs, ['always', 'antique'], 'Matched correct set of words');
 
 
 ## and we are done for today
