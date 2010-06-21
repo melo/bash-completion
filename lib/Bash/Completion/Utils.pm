@@ -37,7 +37,7 @@ sub command_in_path {
 
 sub match_perl_modules {
   my ($pm, $bns) = @_;
-  my @found;
+  my %found;
 
   my ($ns, $name) = $pm =~ m{^(.+::)?(.*)};
   $ns = '' unless $ns;
@@ -46,10 +46,10 @@ sub match_perl_modules {
   $base =~ s{::}{/}g;
 
   for my $lib (@INC) {
-    _scan_dir_for_perl_modules(catdir($lib, $base), $ns, $name, \@found);
+    _scan_dir_for_perl_modules(catdir($lib, $base), $ns, $name, \%found);
   }
 
-  return @found;
+  return keys %found;
 }
 
 sub _scan_dir_for_perl_modules {
@@ -63,10 +63,10 @@ sub _scan_dir_for_perl_modules {
     my $path = catfile($dir, $entry);
 
     if (-d $path && $entry =~ m/^$name/) {
-      push @$found, "$ns${entry}::";
+      $found->{"$ns${entry}::"} = 1;
     }
     elsif (-f _ && $entry =~ m/^($name.*)[.]pm$/) {
-      push @$found, "$ns$1";
+      $found->{"$ns$1"} = 1;
     }
   }
 }

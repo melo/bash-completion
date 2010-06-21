@@ -44,6 +44,15 @@ cmp_bag(\@pm, ['BashComplete']);
 @pm = match_perl_modules('Plugins::Ba', 'Bash::Completion');
 cmp_bag(\@pm, ['Plugins::BashComplete']);
 
+{
+  ## duplicate our @INC dirs, force it to find multiple copies
+  local @INC;
+  push @INC, 'lib';
+
+  @pm = match_perl_modules('Plugins::Ba', 'Bash::Completion');
+  cmp_bag(\@pm, ['Plugins::BashComplete']);
+}
+
 
 ## prefix_match
 my @mtchs =
