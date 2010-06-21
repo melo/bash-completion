@@ -98,19 +98,10 @@ The system will adjust to new plugins that you install via CPAN.
 
 sub setup {
   my ($self) = @_;
-  my $bc_src = '';
 
   my $bc = Bash::Completion->new;
+  print $bc->setup;
 
-  for my $plugin ($bc->plugins) {
-    next unless $plugin->should_activate;
-
-    if (my $setup = $plugin->generate_bash_setup()) {
-      $bc_src .= "\n$setup\n";
-    }
-  }
-
-  print "\n$bc_src\n";
   return 0;
 }
 

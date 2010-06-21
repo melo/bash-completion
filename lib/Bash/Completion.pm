@@ -35,6 +35,26 @@ sub complete {
 }
 
 
+=method setup
+
+=cut
+
+sub setup {
+  my ($self) = @_;
+  my $script = '';
+
+  for my $plugin ($self->plugins) {
+    next unless $plugin->should_activate;
+
+    if (my $snippet = $plugin->generate_bash_setup()) {
+      $script .= "$snippet\n";
+    }
+  }
+
+  return $script;
+}
+
+
 =method plugins
 
 Search C<@INC> for all classes in the L<Bash::Completion::Plugin> namespace.
