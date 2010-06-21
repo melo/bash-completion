@@ -24,7 +24,8 @@ the C<perldoc> command.
 
 =cut
 sub generate_bash_setup {
-  return 'complete -C "bash-complete complete Perldoc" perldoc';
+  return
+    q{complete -C 'bash-complete complete Perldoc' -o nospace -o default perldoc};
 }
 
 
