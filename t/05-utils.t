@@ -19,45 +19,40 @@ ok(
 
 ## match_perl_modules
 my @pm = match_perl_modules('Bash::Comple');
-cmp_bag(\@pm, ['Bash::Completion', 'Bash::Completion::']);
+cmp_bag(\@pm, ['Completion', 'Completion::']);
 
 @pm = match_perl_modules('Bash::Completion');
-cmp_bag(\@pm, ['Bash::Completion', 'Bash::Completion::']);
+cmp_bag(\@pm, ['Completion', 'Completion::']);
 
 @pm = match_perl_modules('Bash::Completion::');
-cmp_bag(
-  \@pm,
-  [ 'Bash::Completion::Utils',  'Bash::Completion::Plugins::',
-    'Bash::Completion::Plugin', 'Bash::Completion::Request'
-  ]
-);
+cmp_bag(\@pm, ['Utils', 'Plugins::', 'Plugin', 'Request']);
 
 @pm = match_perl_modules('Bash::Completion::U');
-cmp_bag(\@pm, ['Bash::Completion::Utils']);
+cmp_bag(\@pm, ['Utils']);
 
 @pm = match_perl_modules('Bash::Completion::Uz');
 cmp_bag(\@pm, []);
 
-@pm = match_perl_modules('Ba', 'Bash::Completion::Plugins');
+@pm = match_perl_modules('Bash::Completion::Plugins::Ba');
 cmp_bag(\@pm, ['BashComplete']);
 
-@pm = match_perl_modules('Plugins::Ba', 'Bash::Completion');
-cmp_bag(\@pm, ['Plugins::BashComplete']);
+@pm = match_perl_modules('Bash::Completion::Plugins::Ba');
+cmp_bag(\@pm, ['BashComplete']);
 
 {
   ## duplicate our @INC dirs, force it to find multiple copies
   local @INC;
   push @INC, 'lib';
 
-  @pm = match_perl_modules('Plugins::Ba', 'Bash::Completion');
-  cmp_bag(\@pm, ['Plugins::BashComplete']);
+  @pm = match_perl_modules('Bash::Completion::Plugins::Ba');
+  cmp_bag(\@pm, ['BashComplete']);
 }
 
 @pm = match_perl_modules('Net');
 cmp_bag(\@pm, ['Net::'], 'Let Net expand to Net::');
 
 @pm = match_perl_modules('Net:');
-cmp_deeply(\@pm, array_each(re('^Net::.')));
+cmp_deeply(\@pm, array_each(re('^(?<!Net::).')));
 
 
 ## prefix_match

@@ -36,22 +36,27 @@ sub command_in_path {
 =cut
 
 sub match_perl_modules {
-  my ($pm, $bns) = @_;
-  my %found;
+  my ($pm) = @_;
+  my ($filler, %found) = ('');
 
-  $pm .= ':' if $pm =~ /[^:][:]$/;
+  $pm .= $filler = ':' if $pm =~ /[^:]:$/;
 
-  my ($ns, $name) = $pm =~ m{^(.+::)?(.*)};
+  my ($ns, $filter) = $pm =~ m{^(.+::)?(.*)};
   $ns = '' unless $ns;
 
-  my $base = join('::', grep {$_} ($bns, $ns));
-  $base =~ s{::}{/}g;
+  my $sdir = $ns;
+  $sdir =~ s{::}{/}g;
 
   for my $lib (@INC) {
-    _scan_dir_for_perl_modules(catdir($lib, $base), $ns, $name, \%found);
+    next if $lib eq '.';
+    _scan_dir_for_perl_modules(catdir($lib, $sdir), $ns, $filter, \%found);
   }
 
-  return keys %found;
+  my @found = keys %found;
+  map {s/^$ns/$filler/} @found;
+
+  return if 1 == @found && $found[0] eq $filter; ## Exact match, ignore it
+  return @found;
 }
 
 sub _scan_dir_for_perl_modules {

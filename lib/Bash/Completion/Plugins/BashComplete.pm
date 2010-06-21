@@ -47,7 +47,7 @@ sub complete {
     @c = prefix_match($word, @options);
   }
   elsif ($count >= 2 && $args[1] eq 'complete') {
-    @c = match_perl_modules($word, 'Bash::Completion::Plugins');
+    @c = match_perl_modules("Bash::Completion::Plugins::$word");
   }
   elsif ($count <= 2) {
     @c = prefix_match($word, @commands, @options);
