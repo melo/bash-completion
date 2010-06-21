@@ -7,7 +7,7 @@ use warnings;
 
 =attr line
 
-The full command line.
+The full command line as given to us by bash.
 
 =cut
 
@@ -25,7 +25,9 @@ sub word { return $_[0]{word} }
 
 =attr args
 
-The command line as a list of words.
+The command line, up to and including the word to be completed, as a list of terms.
+
+The split of the command line into terms is very very basic. There might be dragons here.
 
 =cut
 
