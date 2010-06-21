@@ -1,5 +1,10 @@
 #!/usr/bin/env perl
 
-use App::BashComplete;
+# ASTRACT: bash-completion magic script
+package
+  bashComplete;
 
+use strict;
+use warnings;
+use App::BashComplete;
 exit(App::BashComplete->new->run(@ARGV));
