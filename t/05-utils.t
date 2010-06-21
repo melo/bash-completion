@@ -53,6 +53,12 @@ cmp_bag(\@pm, ['Plugins::BashComplete']);
   cmp_bag(\@pm, ['Plugins::BashComplete']);
 }
 
+@pm = match_perl_modules('Net');
+cmp_bag(\@pm, ['Net::'], 'Let Net expand to Net::');
+
+@pm = match_perl_modules('Net:');
+cmp_deeply(\@pm, array_each(re('^Net::.')));
+
 
 ## prefix_match
 my @mtchs =

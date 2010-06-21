@@ -39,6 +39,8 @@ sub match_perl_modules {
   my ($pm, $bns) = @_;
   my %found;
 
+  $pm .= ':' if $pm =~ /[^:][:]$/;
+
   my ($ns, $name) = $pm =~ m{^(.+::)?(.*)};
   $ns = '' unless $ns;
 
