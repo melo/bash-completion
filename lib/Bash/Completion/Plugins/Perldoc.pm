@@ -14,6 +14,7 @@ Activate this C<Bash::Completion::Plugins::Perldoc> plugin if we can
 find the C<perldoc> command.
 
 =cut
+
 sub should_activate { return command_in_path('perldoc') }
 
 
@@ -23,6 +24,7 @@ Generates the proper complete command to enable completion for
 the C<perldoc> command.
 
 =cut
+
 sub generate_bash_setup {
   return
     q{complete -C 'bash-complete complete Perldoc' -o nospace -o default perldoc};

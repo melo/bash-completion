@@ -14,6 +14,7 @@ Makes sure we only activate this plugin if we can find C<bash-complete>
 on the PATH.
 
 =cut
+
 sub should_activate { return command_in_path('bash-complete') }
 
 
@@ -23,6 +24,7 @@ Generates the proper complete command to enable completion for
 our C<bash-complete> command.
 
 =cut
+
 sub generate_bash_setup {
   return q{complete -C 'bash-complete complete BashComplete' bash-complete};
 }
@@ -33,6 +35,7 @@ sub generate_bash_setup {
 Completion logic for C<bash-complete>
 
 =cut
+
 my @commands = qw{ setup complete };
 my @options = ('--help', '-h');
 
