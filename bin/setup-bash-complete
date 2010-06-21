@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+# Setup bash-complete in the current shell
+#
+# Part of CPAN Bash::Complete distribution
+#
+
+filename=`mktemp -t bash-template-XXXXXXX`
+
+bash-complete setup > $filename
+. $filename
+
+rm -f $filename
