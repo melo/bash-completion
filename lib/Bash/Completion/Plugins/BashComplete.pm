@@ -24,7 +24,7 @@ our C<bash-complete> command.
 
 =cut
 sub generate_bash_setup {
-  return 'complete -C "bash-complete complete BashComplete" bash-complete';
+  return q{complete -C 'bash-complete complete BashComplete' bash-complete};
 }
 
 
