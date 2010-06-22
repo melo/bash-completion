@@ -44,7 +44,9 @@ sub setup {
   my $script = '';
 
   for my $plugin ($self->plugins) {
-    next unless $plugin->should_activate;
+    my $cmds = $plugin->should_activate;    
+    $cmds = undef if ref($cmds) && !@$cmds;
+    next unless $cmds;
 
     if (my $snippet = $plugin->generate_bash_setup()) {
       $script .= "$snippet\n";

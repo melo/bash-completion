@@ -15,7 +15,10 @@ on the PATH.
 
 =cut
 
-sub should_activate { return command_in_path('bash-complete') }
+sub should_activate {
+  my @commands = ('bash-complete');
+  return [grep { command_in_path($_) } @commands];
+}
 
 
 =method generate_bash_setup

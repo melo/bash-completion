@@ -15,7 +15,10 @@ find the C<perldoc> command.
 
 =cut
 
-sub should_activate { return command_in_path('perldoc') }
+sub should_activate {
+  my @commands = ('perldoc');
+  return [grep { command_in_path($_) } @commands];
+}
 
 
 =method generate_bash_setup
