@@ -23,20 +23,16 @@ sub should_activate {
 
 =method generate_bash_setup
 
-Generates the proper complete command to enable completion for
-the C<perldoc> command.
+Make sure we use bash C<complete> options C<nospace> and C<default>.
 
 =cut
 
-sub generate_bash_setup {
-  return
-    q{complete -C 'bash-complete complete Perldoc' -o nospace -o default perldoc};
-}
+sub generate_bash_setup { return [qw( nospace default )] }
 
 
 =method complete
 
-Completion logic for C<perldoc>.
+Completion logic for C<perldoc>. Completes Perl modules only for now.
 
 =cut
 

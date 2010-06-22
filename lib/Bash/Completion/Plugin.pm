@@ -43,35 +43,47 @@ sub args {
 =method should_activate
 
 The method C<should_activate()> is used by the automatic setup of
-completion rules in the .bashrc.
+completion rules in the .bashrc. It should return a reference to a list
+of commands that the plugin is can complete.
 
-When collecting plugins to activate, the system calls this method. If
-this method returns false, the default, the plugin is not used.
+If this method returns a reference to an empty list (the default), the
+plugin will not be used.
 
 A common implementation of this method is to check the PATH for the
-command we want to provide completion, and return true only if that
+command we want to provide completion, and return the com only if that
 command is found.
+
+For example:
+
+    sub should_activate {
+      return [grep { command_in_path($_) } qw( perldoc pod )];
+    }
 
 =cut
 
-sub should_activate {return}
+sub should_activate { return [] }
 
 
 =method generate_bash_setup
 
-This method should generate the bash commands to enable completion for
-the commands the plugin targets.
+This method receives the list of commands that where found by
+L</should_activate> and must return a list of options to use when
+creating the bash C<complete> command.
 
-For example, something like:
+For example, if a plugin returns C<[qw( nospace default )]>, the
+following bash code is generated:
 
-    complete -C "bash-complete cmd Perldoc" perldoc
+    complete -C 'bash-complete complete PluginName' -o nospace -o default command
 
-This will execute C<bash-complete cmd Perldoc> to complete the
-C<perldoc> command. The C<Perldoc> string is the plugin name.
+By default this method returns a reference to an empty list.
+
+Alternatively, and for complete control, you can return a string with
+the entire bash code to activate the plugin.
+
 
 =cut
 
-sub generate_bash_setup {return}
+sub generate_bash_setup { return [] }
 
 1;
 
@@ -88,12 +100,20 @@ __END__
     use Bash::Completion::Utils qw( command_in_path );
 
     sub should_activate {
-      return command_in_path('xpto');
+      return [grep { command_in_path(_) } ('xpto')];
     }
 
+
+    ## Optionally, for full control of the generated bash code
     sub generate_bash_setup {
-      return 'complete -C "bash-complete cmd XPTO" xpto';
+      return q{complete -C 'bash-complete complete XPTO' xpto};
     }
+
+    ## Use plugin arguments
+    sub generate_bash_setup {
+      return q{complete -C 'bash-complete complete XPTO arg1 arg2 arg3' xpto};
+    }
+    ## $plugin->args will have ['arg1', 'arg2', 'arg3']
 
     1;
 

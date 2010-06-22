@@ -17,9 +17,10 @@ ok($plugin, 'Got a plugin instance');
 is(scalar($plugin->args), 4, '... args as expected');
 cmp_deeply([$plugin->args], [qw( a b c d )], '... and the expected args');
 
-ok(!$plugin->should_activate, 'Default should_activate() returns false');
-ok(!$plugin->generate_bash_setup,
-  'Default generate_bash_setup() returns false');
+cmp_deeply($plugin->should_activate, [],
+  'Default should_activate() returns []');
+cmp_deeply($plugin->generate_bash_setup,
+  [], 'Default generate_bash_setup() returns []');
 
 
 ## and we are done for today

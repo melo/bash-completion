@@ -11,25 +11,13 @@ use Bash::Completion::Utils
 =method should_activate
 
 Makes sure we only activate this plugin if we can find C<bash-complete>
-on the PATH.
+in our PATH.
 
 =cut
 
 sub should_activate {
   my @commands = ('bash-complete');
   return [grep { command_in_path($_) } @commands];
-}
-
-
-=method generate_bash_setup
-
-Generates the proper complete command to enable completion for
-our C<bash-complete> command.
-
-=cut
-
-sub generate_bash_setup {
-  return q{complete -C 'bash-complete complete BashComplete' bash-complete};
 }
 
 

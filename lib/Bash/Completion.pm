@@ -44,13 +44,25 @@ sub setup {
   my $script = '';
 
   for my $plugin ($self->plugins) {
-    my $cmds = $plugin->should_activate;    
-    $cmds = undef if ref($cmds) && !@$cmds;
-    next unless $cmds;
+    my $cmds = $plugin->should_activate;
+    next unless @$cmds;
 
-    if (my $snippet = $plugin->generate_bash_setup()) {
-      $script .= "$snippet\n";
+    my $snippet = $plugin->generate_bash_setup($cmds);
+
+    if (ref $snippet) {
+      my $options = join(' ', map {"-o $_"} @$snippet);
+      my $plugin_name = ref($plugin);
+      $plugin_name =~ s/^Bash::Completion::Plugins:://;
+
+      $snippet = join(
+        "\n",
+        map {
+          qq{complete -C 'bash-complete complete $plugin_name' $options $_}
+          } @$cmds
+      );
     }
+
+    $script .= "$snippet\n" if $snippet;
   }
 
   return $script;
