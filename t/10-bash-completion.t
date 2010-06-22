@@ -17,7 +17,8 @@ for my $plugin (@plugins) {
 
 ## Test setup
 {
-  local $ENV{PATH} = "./bin:$ENV{PATH}";
+  local $ENV{PATH} = "./bin:$ENV{PATH}:./t/tlib/bin";
+  chmod(0755, './t/tlib/bin/perldoc');
 
   my $script = $bc->setup;
   ok($script, 'Got us a setup script');
@@ -25,6 +26,16 @@ for my $plugin (@plugins) {
     $script,
     qr{bash-complete complete BashComplete},
     '... with the expected setup command for bash-complete'
+  );
+  like(
+    $script,
+    qr{bash-complete complete Perldoc},
+    '... with the expected setup command for perldoc'
+  );
+  like(
+    $script,
+    qr{Perldoc' -o nospace -o default },
+    '...... and even using the correct options'
   );
 }
 
