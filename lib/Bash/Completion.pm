@@ -20,6 +20,12 @@ sub new { return bless {}, $_[0] }
 
 =method complete
 
+Given a plugin name and a list reference of plugin arguments, loads the
+proper plugin class, creates the plugin instance and asks for possible
+completions.
+
+Returns the L<Bash::Completion::Request> object.
+
 =cut
 
 sub complete {
@@ -36,6 +42,10 @@ sub complete {
 
 
 =method setup
+
+Checks all plugins found if they should be activated.
+
+Generates and returns the proper bash code snippet to it all up.
 
 =cut
 
@@ -71,7 +81,8 @@ sub setup {
 
 =method plugins
 
-Search C<@INC> for all classes in the L<Bash::Completion::Plugin> namespace.
+Search C<@INC> for all classes in the L<Bash::Completion::Plugins::>
+namespace.
 
 =cut
 
@@ -100,3 +111,35 @@ sub plugins {
 sub _load_class { return eval "require $_[1]" }
 
 1;
+
+=head1 SYNOPSIS
+
+    ## For end users, in your .bashrc:
+    ##
+    . setup-bash-complete
+    ##
+    ## Now install all the Bash::Completion::Plugins:: that you need
+    ##
+    ## For plugin writters, see Bash::Completion::Plugin
+
+=head1 DESCRIPTION
+
+C<bash> completion should just work when you install new commands.
+C<Bash::Completion> is a system to use and write bash completion rules.
+
+For end-users, you just need to add this line to your C<.bashrc> or
+C<.bash_profile>:
+
+    . setup-bash-complete
+
+This will load all the installed C<Bash::Completion> plugins, make sure
+they should be activated and generate the proper bash code to setup bash
+completion for them.
+
+If you later install a new command line tool, and it has a L<Bash::Completion::Plugin>-
+based plugin, all your new shells will have bash completion rules for
+it. You can also force immediate setup by running the same command:
+
+    . setup-bash-complete
+
+To write a new C<Bash::Completion> plugin, see L<Bash::Completion::Plugin>.

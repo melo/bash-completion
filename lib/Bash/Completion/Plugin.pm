@@ -53,6 +53,9 @@ A common implementation of this method is to check the PATH for the
 command we want to provide completion, and return the com only if that
 command is found.
 
+The L<Bash::Completion::Utils> library has a C<command_in_path()> that
+can be pretty useful here.
+
 For example:
 
     sub should_activate {
@@ -85,6 +88,20 @@ the entire bash code to activate the plugin.
 
 sub generate_bash_setup { return [] }
 
+
+=method complete
+
+The plugin completion logic. The class L<Bash::Completion> will call
+this method with a L<Bash::Completion::Request> object, and your code
+should use the Request C<candidates()> method to set the possible
+completions.
+
+The L<Bash::Completion::Utils> library has two functions,
+C<match_perl_module()> and C<prefix_math()> that can be pretty
+useful here.
+
+=cut
+
 1;
 
 __END__
@@ -93,31 +110,42 @@ __END__
 
     ## Example plugin for xpto command
     package Bash::Completion::Plugin::XPTO;
-
+    
     use strict;
     use warnings;
     use parent 'Bash::Completion::Plugin';
     use Bash::Completion::Utils qw( command_in_path );
-
+    
     sub should_activate {
       return [grep { command_in_path(_) } ('xpto')];
     }
-
-
+    
+    
     ## Optionally, for full control of the generated bash code
     sub generate_bash_setup {
       return q{complete -C 'bash-complete complete XPTO' xpto};
     }
-
+    
     ## Use plugin arguments
     sub generate_bash_setup {
       return q{complete -C 'bash-complete complete XPTO arg1 arg2 arg3' xpto};
     }
     ## $plugin->args will have ['arg1', 'arg2', 'arg3']
-
+    
+    
+    sub complete {
+      my ($self, $r) = @_;
+    
+      my @options = ('-h', '--help');
+      $r->candidates(prefix_match($r->word, @options));
+    }
     1;
 
 =head1 DESCRIPTION
+
+    WARNING: the most important class for Plugin writers is the Request
+    class. Please note that the Request class interface is Alpha-quality
+    software, and I will update it before 1.0.
 
 A base class for L<Bash::Completion> plugins that provides the default
 implementations for the required plugin methods.

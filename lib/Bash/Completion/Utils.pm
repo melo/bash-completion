@@ -33,6 +33,32 @@ sub command_in_path {
 
 =function match_perl_modules
 
+Given a partial module name, returns a list of all the possible completions.
+
+If a single exact match is found, it returns nothing.
+
+Some examples:
+
+=over 4
+
+=item (empty string)
+
+List all top level modules and namespaces.
+
+=item Template
+
+List C<Template>, the module, and C<Template::>, the namespace.
+
+=item Net::DNS::RR::
+
+Lists all type of Resource Records modules.
+
+=item File::Tempdir
+
+Returns an empty list.
+
+=back
+
 =cut
 
 sub match_perl_modules {
@@ -55,7 +81,7 @@ sub match_perl_modules {
   my @found = keys %found;
   map {s/^$ns/$filler/} @found;
 
-  return if 1 == @found && $found[0] eq $filter; ## Exact match, ignore it
+  return if 1 == @found && $found[0] eq $filter;    ## Exact match, ignore it
   return @found;
 }
 
@@ -99,10 +125,12 @@ __END__
 
 =head1 SYNOPSIS
 
-    use Bash::Completion::Utils qw( command_in_path );
+    use Bash::Completion::Utils qw(
+      command_in_path match_perl_modules prefix_match
+    );
 
     ...
 
 =head1 DESCRIPTION
 
-A library of utilities functions usefull to plugin writers.
+A library of utility functions usefull to plugin writers.
