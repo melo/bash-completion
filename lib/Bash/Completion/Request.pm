@@ -63,6 +63,8 @@ sub new {
   my ($class) = @_;
 
   return bless {
+    candidates => [],
+
     line  => $ENV{COMP_LINE},
     point => $ENV{COMP_POINT},
     _get_completion_word(),
@@ -79,8 +81,11 @@ Accepts a list of completion candidates and passes them on to the shell.
 
 sub candidates {
   my $self = shift;
+  my $c    = $self->{candidates};
 
-  print "$_\n" for @_;
+  return @$c unless @_;
+
+  push @$c, @_;
 }
 
 

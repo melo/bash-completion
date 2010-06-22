@@ -22,4 +22,7 @@ cmp_deeply([$r->args], [qw(abcd efgh wo)], '... and the expected arguments');
 
 ok($r->can('candidates'), 'Request accepts method candidates()');
 
+$r->candidates('a', 'b', 'c');
+cmp_deeply([$r->candidates], [qw( a b c )], 'candidates() work as expected');
+
 done_testing();

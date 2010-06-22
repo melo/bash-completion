@@ -78,8 +78,12 @@ sub complete {
   return 1 unless $plugin;
 
   my $bc = Bash::Completion->new;
-  return 0 if $bc->complete($plugin, $cmd_line);
-  return 1;
+  my $req = $bc->complete($plugin, $cmd_line);
+
+  return 1 unless $req;
+
+  print "$_\n" for $req->candidates;
+  return 0;
 }
 
 

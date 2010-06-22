@@ -31,7 +31,7 @@ sub complete {
   my $req = Bash::Completion::Request->new;
   $class->new(args => $cmd_line)->complete($req);
 
-  return 0;
+  return $req;
 }
 
 
