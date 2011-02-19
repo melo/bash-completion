@@ -49,7 +49,7 @@ cmp_bag(\@pm, ['BashComplete']);
 }
 
 @pm = match_perl_modules('Net');
-cmp_bag(\@pm, ['Net::'], 'Let Net expand to Net::');
+ok grep( { /^Net::$/ } @pm ), 'Let Net expand to Net::';
 
 @pm = match_perl_modules('Net:');
 cmp_deeply(\@pm, array_each(re('^(?<!Net::).')));
