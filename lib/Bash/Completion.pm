@@ -67,7 +67,7 @@ sub setup {
       $snippet = join(
         "\n",
         map {
-          qq{complete -C 'bash-complete complete $plugin_name' $options $_}
+          qq{complete -C 'bash-complete complete $plugin_name -- ' $options $_}
           } @$cmds
       );
     }
