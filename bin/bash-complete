@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# ASTRACT: bash-completion magic script
+# ABSTRACT: bash-completion magic script
 package
   bashComplete;
 
