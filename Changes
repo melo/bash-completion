@@ -1,4 +1,10 @@
 # Changes for Bash-Completion
 
+0.002 Mon Aug  1 11:19:16 UTC 2011
+     * Fixed failed test reports with namespace prefixes
+     * Made command_in_path() cross platform (@consttype++)
+     * Replace too recent \h with \s
+     * Fixed some Pod::Weaver issues with setup-bash-complete
+
 0.001 Mon Jun 14 10:10:18 UTC 2010
      * Initial release
