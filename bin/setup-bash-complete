@@ -4,6 +4,8 @@
 #
 # Part of CPAN Bash::Complete distribution
 #
+# PODNAME:  setup-bash-complete
+# ABSTRACT: Use in .bashrc to setup bash-complete
 
 filename=`mktemp -t bash-template-XXXXXXX`
 
