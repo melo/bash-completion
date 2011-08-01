@@ -13,3 +13,6 @@ bash-complete setup > $filename
 . $filename
 
 rm -f $filename
+
+
+POD=<<=cut
