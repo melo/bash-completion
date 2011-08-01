@@ -1,5 +1,8 @@
 # Changes for Bash-Completion
 
+0.003 Mon Aug  1 14:04:58 UTC 2011
+     * Fixed extra POD in the setup-bash-complete (RT# 69936)
+
 0.002 Mon Aug  1 11:19:16 UTC 2011
      * Fixed failed test reports with namespace prefixes
      * Made command_in_path() cross platform (@consttype++)
