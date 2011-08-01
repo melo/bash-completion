@@ -95,7 +95,7 @@ sub candidates {
 ## Stolen from http://github.com/yanick/dist-zilla/blob/master/contrib/dzil-complete
 sub _get_completion_word {
   my $comp = substr $ENV{'COMP_LINE'}, 0, $ENV{'COMP_POINT'};
-  $comp =~ s/.*\h//;
+  $comp =~ s/.*\s//;
   return word => $comp;
 }
 
