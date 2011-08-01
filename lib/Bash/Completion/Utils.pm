@@ -6,6 +6,7 @@ use strict;
 use warnings;
 use parent 'Exporter';
 use File::Spec::Functions;
+use Config;
 
 @Bash::Completion::Utils::EXPORT_OK = qw(
   command_in_path
@@ -22,7 +23,7 @@ Given a command name, returns the full path if we find it in the PATH.
 sub command_in_path {
   my ($cmd) = @_;
 
-  for my $path (grep {$_} split(/:/, $ENV{PATH})) {
+  for my $path (grep {$_} split(/$Config{path_sep}/, $ENV{PATH})) {
     my $file = catfile($path, $cmd);
     return $file if -x $file;
   }
