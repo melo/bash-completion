@@ -34,7 +34,7 @@ for my $plugin (@plugins) {
   );
   like(
     $script,
-    qr{Perldoc' -o nospace -o default },
+    qr{-o nospace -o default perldoc},
     '...... and even using the correct options'
   );
 }
