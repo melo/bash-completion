@@ -71,9 +71,6 @@ sub complete {
   my @args = $req->args;
   pop @args; # last is the word
 
-  use XXX;
-  # WWW \@args;
-
   my $function = @args && $args[-1] eq '-f' 
     ? \&get_function_suggestions
     : \&get_package_suggestions
