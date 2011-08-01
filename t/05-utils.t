@@ -48,8 +48,9 @@ cmp_bag(\@pm, ['BashComplete']);
   cmp_bag(\@pm, ['BashComplete']);
 }
 
-@pm = match_perl_modules('Net');
-ok grep( { /^Net::$/ } @pm ), 'Let Net expand to Net::';
+unshift @INC, './t/tlib';
+@pm = match_perl_modules('OhPleaseLetNotBeAModuleWithThisPrefixOnCPAN');
+ok grep( { /^OhPleaseLetNotBeAModuleWithThisPrefixOnCPAN::$/ } @pm ), 'Let ourUniquePrefix expand to ourUniquePrefix::';
 
 @pm = match_perl_modules('Net:');
 cmp_deeply(\@pm, array_each(re('^(?<!Net::).')));
