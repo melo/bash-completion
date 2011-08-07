@@ -101,7 +101,7 @@ sub _get_completion_word {
 
 sub _get_arguments {
   my $comp = substr $ENV{'COMP_LINE'}, 0, $ENV{'COMP_POINT'};
-  my @args = split(/\h+/, $comp);
+  my @args = split(/\s+/, $comp);
 
   return args => \@args, count => scalar(@args);
 }
