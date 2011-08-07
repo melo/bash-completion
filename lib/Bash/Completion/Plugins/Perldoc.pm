@@ -80,81 +80,81 @@ sub complete {
 }
 
 sub slurp_dir {
-	opendir my $dir, shift or return;
-	no_upwards readdir $dir;
+  opendir my $dir, shift or return;
+  no_upwards readdir $dir;
 }
 
 sub suggestion_from_name {
-	my ( $file_rx, $path, $name ) = @_;
-	return if not $name =~ /$file_rx/;
-	return $name.'::', $name.':: ' if -d catdir $path, $name;
-	return $1;
+  my ( $file_rx, $path, $name ) = @_;
+  return if not $name =~ /$file_rx/;
+  return $name.'::', $name.':: ' if -d catdir $path, $name;
+  return $1;
 }
 
 sub suggestions_from_path {
-	my ( $file_rx, $path ) = @_;
-	map { suggestion_from_name( $file_rx, $path, $_ ) } slurp_dir( $path );
+  my ( $file_rx, $path ) = @_;
+  map { suggestion_from_name( $file_rx, $path, $_ ) } slurp_dir( $path );
 }
 
 sub get_package_suggestions {
-	my ( $pkg ) = @_;
+  my ( $pkg ) = @_;
 
-	my @segment = split /::|:\z/, $pkg, -1;
-	my $file_rx = qr/\A(${\quotemeta pop @segment}\w*)(?:\.pm|\.pod)?\z/;
+  my @segment = split /::|:\z/, $pkg, -1;
+  my $file_rx = qr/\A(${\quotemeta pop @segment}\w*)(?:\.pm|\.pod)?\z/;
 
-	my $home = rel2abs $ENV{'HOME'};
-	my $cwd = rel2abs do { require Cwd; Cwd::cwd() };
+  my $home = rel2abs $ENV{'HOME'};
+  my $cwd = rel2abs do { require Cwd; Cwd::cwd() };
 
-	my @suggestion =
+  my @suggestion =
         uniq
         map { ( my $x = $_ ) =~ s/::\s$/::/; $x }
-		map { suggestions_from_path $file_rx, $_ }
-		uniq 
+    map { suggestions_from_path $file_rx, $_ }
+    uniq 
         map { catdir $_, @segment }
-		grep { $home ne $_ and $cwd ne $_ }
-		map { $_, ( catdir $_, 'pod' ) }
-		map { rel2abs $_ }
-		@INC;
+    grep { $home ne $_ and $cwd ne $_ }
+    map { $_, ( catdir $_, 'pod' ) }
+    map { rel2abs $_ }
+    @INC;
 
-	# fixups
-	if ( $pkg eq '' ) {
-		my $total = @suggestion;
-		@suggestion = grep { not /^perl/ } @suggestion;
-		my $num_hidden = $total - @suggestion;
-		push @suggestion, "perl* ($num_hidden hidden)" if $num_hidden;
-	}
-	elsif ( $pkg =~ /(?<!:):\z/ ) {
-		@suggestion = map { ":$_" } @suggestion;
-	}
+  # fixups
+  if ( $pkg eq '' ) {
+    my $total = @suggestion;
+    @suggestion = grep { not /^perl/ } @suggestion;
+    my $num_hidden = $total - @suggestion;
+    push @suggestion, "perl* ($num_hidden hidden)" if $num_hidden;
+  }
+  elsif ( $pkg =~ /(?<!:):\z/ ) {
+    @suggestion = map { ":$_" } @suggestion;
+  }
 
-	return @suggestion;
+  return @suggestion;
 }
 
 sub get_function_suggestions {
-	my ( $func ) = @_;
+  my ( $func ) = @_;
 
-	my $perlfunc;
-	for ( @INC, undef ) {
-		return if not defined;
-		$perlfunc = catfile( $_, qw( pod perlfunc.pod ) );
-		last if -r $perlfunc;
-	}
+  my $perlfunc;
+  for ( @INC, undef ) {
+    return if not defined;
+    $perlfunc = catfile( $_, qw( pod perlfunc.pod ) );
+    last if -r $perlfunc;
+  }
 
-	open my $fh, '<', $perlfunc or return;
+  open my $fh, '<', $perlfunc or return;
 
-	my @suggestion;
-	my $nest_level = -1;
-	while ( <$fh> ) {
-		next if 1 .. /^=head2 Alphabetical Listing of Perl Functions$/;
-		++$nest_level if /^=over/;
-		--$nest_level if /^=back/;
-		next if $nest_level;
-		push @suggestion, /^=item (-?\w+)/;
-	}
+  my @suggestion;
+  my $nest_level = -1;
+  while ( <$fh> ) {
+    next if 1 .. /^=head2 Alphabetical Listing of Perl Functions$/;
+    ++$nest_level if /^=over/;
+    --$nest_level if /^=back/;
+    next if $nest_level;
+    push @suggestion, /^=item (-?\w+)/;
+  }
 
-	my $func_rx = qr/\A${\quotemeta $func}/;
+  my $func_rx = qr/\A${\quotemeta $func}/;
 
-	return grep { /$func_rx/ } @suggestion;
+  return grep { /$func_rx/ } @suggestion;
 }
 
 1;
