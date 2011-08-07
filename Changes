@@ -1,5 +1,10 @@
 # Changes for Bash-Completion
 
+0.005 Sun Aug  7 13:21:11 UTC 2011
+     * Make some tests more robust, should work on Windows now
+     * Bump Getopt::Long required version to make sure we have
+       GetOptionsFromArray
+
 0.004 Sun Aug  7 12:54:44 UTC 2011
      * Attemp to fix CPANTesters test failures regarding plugin setup
      * Fixed one place where we missed \h => \s in 0.002
