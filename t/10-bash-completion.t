@@ -27,6 +27,9 @@ for my $plugin (@plugins) {
   open(my $has_fake_perldoc,       '>', $fake_perldoc);
   open(my $has_fake_bash_complete, '>', $fake_bash_complete);
 
+  chmod 0755, $fake_bash_complete;
+  chmod 0755, $fake_perldoc;
+
   my $script = $bc->setup;
   ok($script, 'Got us a setup script');
 
