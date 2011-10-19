@@ -1,5 +1,9 @@
 # Changes for Bash-Completion
 
+0.006 Wed Oct 19 10:13:07 UTC 2011
+     * Make sure our fake files have the proper permissions (Rob
+       Hoelz++, via pull request #3)
+
 0.005 Sun Aug  7 13:21:11 UTC 2011
      * Make some tests more robust, should work on Windows now
      * Bump Getopt::Long required version to make sure we have
