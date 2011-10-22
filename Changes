@@ -1,5 +1,7 @@
 # Changes for Bash-Completion
 
+{{$NEXT}}
+
 0.006 Wed Oct 19 10:13:07 UTC 2011
      * Make sure our fake files have the proper permissions (Rob
        Hoelz++, via pull request #3)
