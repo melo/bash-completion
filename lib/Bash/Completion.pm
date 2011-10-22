@@ -5,6 +5,7 @@ package Bash::Completion;
 use strict;
 use warnings;
 use Bash::Completion::Request;
+use Module::Load ();
 use Module::Pluggable
   search_path => ['Bash::Completion::Plugins'],
   sub_name    => 'plugin_names';
@@ -108,7 +109,9 @@ sub plugins {
 #######
 # Utils
 
-sub _load_class { return eval "require $_[1]" }
+sub _load_class {
+  eval { Module::Load::load($_[1]); 1 };
+}
 
 1;
 
