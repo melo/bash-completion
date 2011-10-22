@@ -1,6 +1,8 @@
 # Changes for Bash-Completion
 
 {{$NEXT}}
+
+0.008     2011-10-22 17:52:11 Europe/Lisbon
      * Switch deprecated dzil plugin BumpVersionFromGit to
        Git::NextVersion
 
