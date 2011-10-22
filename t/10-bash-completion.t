@@ -2,10 +2,9 @@
 
 use strict;
 use warnings;
+use lib 't/tlib';
 use Test::More;
-use File::Temp;
-use File::Spec::Functions 'catfile';
-use Config;
+use Test::BashCompletionTestUtils 'create_test_cmds';
 
 use_ok('Bash::Completion') || die "Could not load Bash::Completion, ";
 
@@ -20,15 +19,8 @@ for my $plugin (@plugins) {
 
 ## Test setup
 {
-  my $bin_dir = File::Temp->newdir;
-  local $ENV{PATH} = "$bin_dir$Config{path_sep}$ENV{PATH}";
-  my $fake_perldoc       = catfile($bin_dir->dirname, 'perldoc');
-  my $fake_bash_complete = catfile($bin_dir->dirname, 'bash-complete');
-  open(my $has_fake_perldoc,       '>', $fake_perldoc);
-  open(my $has_fake_bash_complete, '>', $fake_bash_complete);
-
-  chmod 0755, $fake_bash_complete;
-  chmod 0755, $fake_perldoc;
+  my $cmds = create_test_cmds('perldoc', 'bash-complete');
+  local $ENV{PATH} = $cmds->{path};
 
   my $script = $bc->setup;
   ok($script, 'Got us a setup script');
@@ -37,17 +29,17 @@ for my $plugin (@plugins) {
     $script,
     qr{bash-complete complete BashComplete},
     '... with the expected setup command for bash-complete'
-  ) if $has_fake_bash_complete;
+  ) if $cmds->{cmd}{'bash-complete'};
   like(
     $script,
     qr{bash-complete complete Perldoc},
     '... with the expected setup command for perldoc'
-  ) if $has_fake_perldoc;
+  ) if $cmds->{cmd}{'perldoc'};
   like(
     $script,
     qr{-o nospace -o default perldoc},
     '...... and it even has the correct options'
-  ) if $has_fake_perldoc;
+  ) if $cmds->{cmd}{'perldoc'};
 }
 
 
