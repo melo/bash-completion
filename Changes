@@ -1,6 +1,8 @@
 # Changes for Bash-Completion
 
 {{$NEXT}}
+     * Switch deprecated dzil plugin BumpVersionFromGit to
+       Git::NextVersion
 
 0.007     2011-10-22 16:21:03 Europe/Lisbon
      * Fix dependencies to be able to use Plugin::Perldoc
