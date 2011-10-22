@@ -1,6 +1,10 @@
 # Changes for Bash-Completion
 
 {{$NEXT}}
+     * Fix dependencies to be able to use Plugin::Perldoc
+     * Load modules with latest version of Module::Load instead of
+       require string (see http://bit.ly/qrCjvZ for further discussion)
+     * Refactor and reuse the logic to create test filesystem commands
 
 0.006 Wed Oct 19 10:13:07 UTC 2011
      * Make sure our fake files have the proper permissions (Rob
