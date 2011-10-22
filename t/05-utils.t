@@ -2,11 +2,10 @@
 
 use strict;
 use warnings;
+use lib 't/tlib';
 use Test::More;
 use Test::Deep;
-use File::Temp;
-use File::Spec::Functions 'catfile';
-use Config;
+use Test::BashCompletionTestUtils 'create_test_cmds';
 
 use_ok('Bash::Completion::Utils',
   qw(command_in_path match_perl_modules prefix_match))
@@ -14,17 +13,17 @@ use_ok('Bash::Completion::Utils',
 
 
 subtest 'command_in_path' => sub {
-  my $bin_dir = File::Temp->newdir;
-  local $ENV{PATH} = "$bin_dir$Config{path_sep}$ENV{PATH}";
   my $name = join('-', $$, rand(time()), time());
-  my $path = catfile($bin_dir->dirname, $name);
-  open(my $has_cmd, '>', $path);
-  chmod(755, $path);
+  my $cmds = create_test_cmds($name);
+  local $ENV{PATH} = $cmds->{path};
 
-  ok(command_in_path($name), 'command_in_path($cmd_name) works') if $has_cmd;
+  ok(command_in_path($name), "command_in_path($name) works") if $cmds->{cmd}{$name};
+
+
+  my $non_existing_command = "please-dont-exist-pleeease-$name";
   ok(
-    !command_in_path("please-dont-exist-pleeease-$name"),
-    'command_in_path($non_existing_command) also works'
+    !command_in_path($non_existing_command),
+    "command_in_path($non_existing_command) also works"
   );
 };
 
