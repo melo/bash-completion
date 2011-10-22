@@ -1,6 +1,8 @@
 # Changes for Bash-Completion
 
 {{$NEXT}}
+
+0.007     2011-10-22 16:21:03 Europe/Lisbon
      * Fix dependencies to be able to use Plugin::Perldoc
      * Load modules with latest version of Module::Load instead of
        require string (see http://bit.ly/qrCjvZ for further discussion)
